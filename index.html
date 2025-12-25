@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Personal Branding Programmer</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --accent-blue: #3EC5FF;
+      --accent-red: #8B0000;
+      --yellow: #FFD60A;
+      --abu: #d3d3d3;
+      --muted: #d3d3d3;
+    }
+    *{box-sizing:border-box}
+    body {
+      margin: 0;
+      font-family: Poppins, sans-serif;
+      background: url('img/Lucid_Origin_a_cinematic_photo_of_Ultradetailed_futuristic_mod_1.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: -1;
+    }
+
+    header {
+      padding: 80px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 42px;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      color: var(--muted);
+    }
+
+    section {
+      padding: 80px 15%;
+      border-top: 1px solid #1E1E1E;
+      position: relative;
+    }
+
+    section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent 0%, rgba(62,197,255,0.05) 50%, transparent 100%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    h2 {
+      color: var(--accent-blue);
+      margin-bottom: 20px;
+    }
+
+    .myGame {
+      color: var(--accent-blue);
+      margin-bottom: 0;
+      margin-top: 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #1E1E1E;
+      padding: 20px;
+      border-radius: 8px;
+      border: 3px solid var(--accent-red);
+      box-shadow: 0 8px 32px rgba(139, 0, 0, 0.3), 0 0 16px rgba(62, 197, 255, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 48px rgba(139, 0, 0, 0.5), 0 0 24px rgba(62, 197, 255, 0.4);
+    }
+
+    .card a {
+      color: var(--accent-blue);
+      text-decoration: none;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #777;
+      border-top: 1px solid #1E1E1E;
+    }
+
+    /* ===== SLIDER (NEW: absolute slides) ===== */
+    .slider {
+      position: relative;
+      max-width: 820px;     /* UBAH ini untuk atur lebar area slider keseluruhan */
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .slides {
+      position: relative;   /* now children will be absolute */
+      height: 550px;        /* container height (desktop). Keep in sync with .slide img height */
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;             /* top:0;right:0;bottom:0;left:0; */
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 14px 0;
+      transition: transform 420ms cubic-bezier(.22,.9,.32,1), opacity 260ms ease;
+      will-change: transform, opacity;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateX(100%); /* default: off-screen right */
+    }
+
+    .slide.active {
+      pointer-events: auto;
+      opacity: 1;
+      transform: translateX(0);
+      z-index: 3;
+    }
+
+    .slide.to-left {
+      transform: translateX(-100%);
+      z-index: 2;
+    }
+
+    .slide.to-right {
+      transform: translateX(100%);
+      z-index: 1;
+    }
+
+    .slide img {
+      width: 100%;          /* UBAH LEBAR FOTO DI SINI (mis. 80% / 100%) */
+      height: 550px;  
+      height: auto;
+      max-height: 550px;  
+      max-width: 50%; /* desktop: batasi tinggi */
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid rgba(62,197,255,0.12);
+      display:block;
+      margin: 0 auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    }
+
+    .slide-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.6);
+      color: var(--accent-blue);
+      border: 1px solid rgba(62,197,255,0.08);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index: 6;
+      backdrop-filter: blur(6px);
+    }
+    .slide-btn:active { transform: translateY(-50%) scale(.96); }
+    .prev { left: 12px; }
+    .next { right: 12px; }
+
+    /* small screens: make image wider and shorter */
+    @media (max-width:900px){
+      .slider { max-width: 92%; }
+      .slides { height: 220px; } /* keep height consistent with img */
+      .slide img {
+        width: 95%;          /* mobile: image almost full width */
+        height: 220px;  
+        object-fit: cover;     /* mobile: shorter */
+      }
+      .prev { left: 6px; }
+      .next { right: 6px; }
+    }
+
+    .dots {
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    .dots button {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin: 4px;
+      border: none;
+      background: rgba(255,255,255,0.12);
+      cursor: pointer;
+      transition: transform .12s ease, background .12s ease;
+    }
+    
+    .dots button.active {
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-red));
+      transform: scale(1.25);
+      box-shadow: 0 8px 20px rgba(62,197,255,0.12);
+    }
+
+    /* focus styles for accessibility */
+    .slide-btn:focus, .dots button:focus { outline: 2px solid rgba(62,197,255,0.14); outline-offset: 4px; }
+    
+/* ===== TESTIMONI ===== */
+  .testimoni-box{
+    max-width:700px;
+    margin:auto;
+    background:#1a1a1a;
+    padding:20px;
+    border-radius:10px;
+}
+
+  .testimoni-box input,
+  .testimoni-box textarea{
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    border-radius:6px;
+    border:none;
+    font-family:Poppins;
+}
+
+  .testimoni-box button{
+    background:linear-gradient(90deg,var(--accent-blue),var(--accent-red));
+    color:white;
+    border:none;
+    padding:10px 18px;
+    border-radius:20px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+  #list-testimoni{
+   margin-top:20px;
+}
+
+  .testimoni-item{
+    background:#111;
+    padding:12px;
+    margin-bottom:12px;
+    border-left:3px solid var(--accent-blue);
+}
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Made Geronimo</h1>
+  <p>Programmer | Android Developer | Game Developer | Pengembangan Aplikasi Dekstop | Private Tutor</p>
+</header>
+
+<section>
+  <h2>Tentang Saya</h2>
+  <p>Saya adalah developer pemula yang fokus dalam bidang pengembangan game, aplikasi Android berbasis HTTP, website, dan aplikasi desktop.</p><br>
+  <p>Bahasa yang benar-benar saya kuasai adalah Python, C++, C#, serta fundamental pemrograman sebagai fondasi utama. Selain itu, saya juga memahami dasar Java, JavaScript, PHP, SQL. Saya mampu membagikan ilmu bahasa pemrograman tersebut dengan bahasa yang sedderhana dan mudah di mengerti</p><br>
+  <p>Saya terbiasa belajar bertahap, membangun dari nol, dan menyederhanakan hal yang rumit agar tetap masuk akal. Prinsip ini juga yang saya terapkan saat membimbing orang lain.</p>
+</section>
+
+<section>
+  <h2>Portfolio Game</h2>
+  <div class="grid">
+    <div class="card">
+      <h2 class="myGame">My Game</h2>
+      <h3 style="color: red">Scarlet Vanguard Blade of Ruin</h3>
+      <p>Scarlet Vanguard Blade of Ruin adalah projek game 2d kedua saya dengan mengangkat tema pertempuran cepat dan mekanisme permainan yang sederhana</p>
+      <a href="Scarlet Vanguard Blade of Ruin.zip" download>Download</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- PRIVATE COURSE -->
+<section>
+  <h2>Private Course</h2>
+  <p>Saya membuka les privat coding untuk pemula di sekitar Singaraja, khusus untuk kalian yang ingin belajar dari dasar tanpa tekanan. Materi disesuaikan dengan kemampuan siswa, mulai dari logika pemrograman, latihan coding langsung, hingga pembuatan program sederhana dan aplikasi dasar.</p>
+  <br>
+  <p>Fokus saya bukan membuat cepat jago di atas kertas, tapi membentuk cara berpikir programmer yang kuat dan tahan lama.</p>
+</section>
+
+<!-- GALLERY MENGAJAR (SLIDER) -->
+<section>
+  <h2>Gallery Mengajar</h2>
+
+  <div class="slider" id="slider" aria-roledescription="carousel" tabindex="0">
+    <div class="slides" id="slides">
+      <div class="slide active" aria-hidden="false"><img src="img/ngajar_2.jpg" alt="Foto mengajar 1"></div>
+      <div class="slide to-right" aria-hidden="true"><img src="img/contoh2.jpg" alt="Foto mengajar 2"></div>
+      <div class="slide to-right" aria-hidden="true"><img src="img/ngajar1.jpg" alt="Foto mengajar 3"></div>
+      <div class="slide to-right" aria-hidden="true"><img src="img/ngajar3.jpg" alt="Foto mengajar 4"></div> 
+      <div class="slide to-right" aria-hidden="true"><img src="img/ngajar5.jpg" alt="Foto mengajar 5"></div> 
+    </div>
+
+    <button class="slide-btn prev" aria-label="Sebelumnya" id="prevBtn">‹</button>
+    <button class="slide-btn next" aria-label="Berikutnya" id="nextBtn">›</button>
+
+    <div class="dots" id="dots" role="tablist" aria-label="Indikator slide"></div>
+  </div>
+</section>
+
+<section>
+<h2>Testimoni</h2>
+
+<div class="testimoni-box">
+  <input id="nama" placeholder="Nama">
+  <textarea id="isi" rows="4" placeholder="Tulis testimoni"></textarea>
+  <button id="btnKirim" type="button">Kirim Testimoni</button>
+
+  <div id="list-testimoni"></div>
+</div>
+</section>
+
+<section>
+  <h2>Kontak</h2>
+  <p>Instagram: <a href="https://instagram.com/geronimowijaya" target="_blank" style="color: var(--abu); text-decoration: none;">@geronimowijaya</a></p>
+  <p>Email: <a href="mailto:ger00wrr@gmail.com" style="color: var(--abu); text-decoration: none;">ger00wrr@gmail.com</a></p>
+</section>
+
+<footer>
+  © 2025 - Geronimo Wijaya
+</footer>
+
+<script>
+/* Slider logic (position-per-slide approach). Menjaga semua nama variabel krusial sama. */
+(function(){
+  const slidesEl = document.getElementById('slides');
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const dotsWrap = document.getElementById('dots');
+  let index = 0;
+  const total = slides.length;
+
+  // buat dots
+  for(let i=0;i<total;i++){
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('aria-label', 'Slide ' + (i+1));
+    b.dataset.index = i;
+    b.addEventListener('click', ()=> goTo(i));
+    dotsWrap.appendChild(b);
+  }
+  const dots = Array.from(dotsWrap.children);
+
+  // helper untuk atur kelas tiap slide
+  function setSlideClasses(newIndex, direction){
+    slides.forEach((s, i) => {
+      s.classList.remove('active','to-left','to-right');
+      s.setAttribute('aria-hidden','true');
+      // default positioning
+      if(i < newIndex) { s.classList.add('to-left'); }
+      else if(i > newIndex) { s.classList.add('to-right'); }
+      else { s.classList.add('active'); s.setAttribute('aria-hidden','false'); }
+    });
+    // update dots
+    dots.forEach((d,i) => d.classList.toggle('active', i === newIndex));
+  }
+
+  function update(direction){
+    // direction unused for now, left for possible transition tweaks
+    setSlideClasses(index, direction);
+  }
+
+  function goTo(i){
+    const old = index;
+    index = (i + total) % total;
+    const dir = index > old || (old === total-1 && index === 0) ? 'next' : 'prev';
+    update(dir);
+    resetAutoplay();
+  }
+
+  function next(){ goTo(index + 1); }
+  function prev(){ goTo(index - 1); }
+
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+
+  // keyboard nav (slider container focusable)
+  document.getElementById('slider').addEventListener('keydown', (e)=>{
+    if(e.key === 'ArrowLeft') prev();
+    if(e.key === 'ArrowRight') next();
+  });
+
+  // autoplay with pause on hover/focus
+  let autoplay = true;
+  const AUTOPLAY_MS = 4000;
+  let timerId = null;
+  function startAutoplay(){
+    if(!autoplay) return;
+    stopAutoplay();
+    timerId = setInterval(()=> next(), AUTOPLAY_MS);
+  }
+  function stopAutoplay(){ if(timerId) clearInterval(timerId); timerId = null; }
+  function resetAutoplay(){ stopAutoplay(); startAutoplay(); }
+
+  const sliderEl = document.getElementById('slider');
+  sliderEl.addEventListener('mouseenter', () => stopAutoplay());
+  sliderEl.addEventListener('mouseleave', () => startAutoplay());
+  sliderEl.addEventListener('focusin', () => stopAutoplay());
+  sliderEl.addEventListener('focusout', () => startAutoplay());
+
+  // ----- Simple swipe support: we'll drag current and adjacent slides -----
+  let isDown = false, startX = 0, lastX = 0;
+  slidesEl.addEventListener('pointerdown', (e)=> {
+    isDown = true;
+    startX = e.clientX;
+    lastX = startX;
+    slidesEl.style.cursor = 'grabbing';
+    stopAutoplay();
+    try { e.target.setPointerCapture && e.target.setPointerCapture(e.pointerId); } catch(err){}
+  });
+
+  slidesEl.addEventListener('pointermove', (e)=> {
+    if(!isDown) return;
+    const dx = e.clientX - startX;
+    const w = slidesEl.clientWidth || 1;
+    const pct = (dx / w) * 100;
+
+    // sementara, geser current, prev, next secara visual (tanpa mengubah kelas permanen)
+    const cur = slides[index];
+    const prevIndex = (index - 1 + total) % total;
+    const nextIndex = (index + 1) % total;
+    const prevSlide = slides[prevIndex];
+    const nextSlide = slides[nextIndex];
+
+    // no layout thrashing: directly set transform for these three
+    cur.style.transition = 'none';
+    cur.style.transform = `translateX(${pct}%)`;
+    if(prevSlide){
+      prevSlide.style.transition = 'none';
+      prevSlide.style.transform = `translateX(${pct - 100}%)`;
+    }
+    if(nextSlide){
+      nextSlide.style.transition = 'none';
+      nextSlide.style.transform = `translateX(${pct + 100}%)`;
+    }
+
+    lastX = e.clientX;
+  });
+
+  function endPointer(e){
+    if(!isDown) return;
+    isDown = false;
+    slidesEl.style.cursor = '';
+    const dx = (e.clientX || lastX) - startX;
+    const w = slidesEl.clientWidth || 1;
+    const threshold = w * 0.18;
+    // restore transitions
+    slides.forEach(s => s.style.transition = '');
+    // if swipe enough
+    if(Math.abs(dx) > threshold){
+      if(dx < 0) next(); else prev();
+    } else {
+      // snap back: reapply classes to animate back to place
+      update();
+    }
+    startAutoplay();
+    try { e.target.releasePointerCapture && e.target.releasePointerCapture(e.pointerId); } catch(err){}
+  }
+
+  slidesEl.addEventListener('pointerup', endPointer);
+  slidesEl.addEventListener('pointercancel', ()=> { if(isDown){ isDown=false; update(); startAutoplay(); } });
+  slidesEl.addEventListener('pointerleave', (e)=> { if(isDown) endPointer(e); });
+
+  // init state
+  update();
+
+  // expose controls (optional)
+  sliderEl.slider = { goTo, next, prev, startAutoplay, stopAutoplay };
+
+})();
+document.querySelectorAll('.slide img').forEach(img=>{
+  img.addEventListener('error', ()=> console.error('Gagal load image:', img.src));
+  img.addEventListener('load', ()=> console.log('Loaded:', img.src));
+});
+</script>
+
+<!-- Firebase ---->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    query,
+    orderBy
+  } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDx1hA9rA5wDW-TOeBt-hmtJ9yZSLRNSWM",
+    authDomain: "testimoni-pelanggan.firebaseapp.com",
+    projectId: "testimoni-pelanggan",
+    storageBucket: "testimoni-pelanggan.appspot.com",
+    messagingSenderId: "457538416016",
+    appId: "1:457538416016:web:2111f6da629cb3e74f1715"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const btn = document.getElementById("btnKirim");
+
+  btn.addEventListener("click", async () => {
+    const nama = document.getElementById("nama").value.trim();
+    const isi = document.getElementById("isi").value.trim();
+
+    if (!nama || !isi) {
+      alert("Nama dan testimoni wajib diisi");
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "testimoni"), {
+        nama,
+        isi,
+        waktu: Date.now()
+      });
+
+      document.getElementById("nama").value = "";
+      document.getElementById("isi").value = "";
+      loadTestimoni();
+    } catch (e) {
+      console.error(e);
+      alert("Gagal kirim testimoni. Cek console.");
+    }
+  });
+
+  async function loadTestimoni() {
+    const list = document.getElementById("list-testimoni");
+    list.innerHTML = "";
+
+    const q = query(
+      collection(db, "testimoni"),
+      orderBy("waktu", "desc")
+    );
+
+    const snap = await getDocs(q);
+
+    snap.forEach(doc => {
+      const d = doc.data();
+      list.innerHTML += `
+        <div class="testimoni-item">
+          <b>${d.nama}</b><br>
+          ${d.isi}
+        </div>
+      `;
+    });
+  }
+
+  loadTestimoni();
+</script>
+</body>
+</html>
